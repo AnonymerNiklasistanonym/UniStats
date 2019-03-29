@@ -74,3 +74,16 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+
+
+# Custom ignores
+
+# Ignore create_ts_type_from_json_schema.ts production
+templates/create_ts_type_from_json_schema.js
+
+# Ignore non demo JSON data
+data/uni.json
+
+# Ignore dist output
+dist/*

@@ -1,0 +1,253 @@
+{
+    "$schema": "./uni_template.json",
+    "field_of_study": "Medieninformatik",
+    "matriculation_number": 123456,
+    "name": {
+        "first_name": "Your",
+        "surname": "Name"
+    },
+    "current_semester": 5,
+    "needed_credits": 180,
+    "modules": {
+        "base": [
+            {
+                "name": "Programmierung und Software-Entwicklung",
+                "number": 10281,
+                "credits": 9,
+                "participated_semesters": [
+                    1,
+                    2
+                ],
+                "wrote_exam_semesters": [
+                    1,
+                    2
+                ],
+                "recommended_semester": 1,
+                "grade": 2.0
+            },
+            {
+                "name": "Mathematik für Informatiker und Softwaretechniker",
+                "number": 10190,
+                "credits": 18,
+                "recommended_semester": 2,
+                "participated_semesters": [
+                    1,
+                    2
+                ],
+                "wrote_exam_semesters": [
+                    2
+                ]
+            },
+            {
+                "name": "Mensch-Computer-Interaktion",
+                "number": 10210,
+                "credits": 6,
+                "participated_semesters": [
+                    2
+                ],
+                "wrote_exam_semesters": [
+                    2
+                ],
+                "recommended_semester": 2,
+                "grade": 3.7
+            },
+            {
+                "name": "Theoretische Grundlagen der Informatik",
+                "number": 10940,
+                "credits": 12,
+                "participated_semesters": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "wrote_exam_semesters": [
+                    5
+                ],
+                "recommended_semester": 2
+            },
+            {
+                "name": "Datenstrukturen und Algorithmen",
+                "number": 12060,
+                "credits": 9,
+                "participated_semesters": [
+                    2
+                ],
+                "wrote_exam_semesters": [
+                    2
+                ],
+                "recommended_semester": 2,
+                "grade": 1.7
+            },
+            {
+                "name": "Medieninformatik",
+                "number": 56210,
+                "credits": 6,
+                "participated_semesters": [
+                    1
+                ],
+                "wrote_exam_semesters": [
+                    1
+                ],
+                "recommended_semester": 1,
+                "grade": 1.0
+            }
+        ],
+        "core": [
+            {
+                "name": "Computergraphik",
+                "number": 10060,
+                "credits": 6,
+                "participated_semesters": [
+                    5
+                ],
+                "wrote_exam_semesters": [
+                    5
+                ],
+                "recommended_semester": 5,
+                "grade": 3.7
+            },
+            {
+                "name": "Imaging Science",
+                "number": 10170,
+                "credits": 6,
+                "participated_semesters": [
+                    4
+                ],
+                "wrote_exam_semesters": [
+                    4
+                ],
+                "recommended_semester": 4,
+                "grade": 2.7
+            },
+            {
+                "name": "Programmierung für Medieninformatik",
+                "number": 56220,
+                "credits": 6,
+                "participated_semesters": [
+                    3
+                ],
+                "recommended_semester": 3,
+                "grade": 3.7
+            },
+            {
+                "name": "Empirische Methoden für Medieninformatik",
+                "number": 56320,
+                "credits": 6,
+                "participated_semesters": [
+                    3,
+                    5
+                ],
+                "recommended_semester": 3
+            },
+            {
+                "name": "Medieninformatik Projekt - Theorie",
+                "number": 56240,
+                "credits": 6,
+                "recommended_semester": 4
+            },
+            {
+                "name": "Seminar Medieninformatik",
+                "number": 56250,
+                "credits": 6,
+                "recommended_semester": 5
+            },
+            {
+                "name": "Fachstudie Medieninformatik",
+                "number": 56260,
+                "credits": 6,
+                "recommended_semester": 6
+            }
+        ],
+        "supplementary": [
+            {
+                "name": "INF",
+                "number": 310,
+                "credits": 18,
+                "modules": [
+                    {
+                        "name": "Programmierparadigmen",
+                        "number": 36100,
+                        "credits": 6,
+                        "participated_semesters": [
+                            4
+                        ],
+                        "wrote_exam_semesters": [
+                            4
+                        ],
+                        "recommended_semester": 4,
+                        "grade": 3.0
+                    },
+                    {
+                        "name": "Systemkonzepte und -programmierung",
+                        "number": 40090,
+                        "credits": 6,
+                        "participated_semesters": [
+                            3
+                        ],
+                        "wrote_exam_semesters": [
+                            3
+                        ],
+                        "recommended_semester": 5,
+                        "grade": 2.8
+                    }
+                ]
+            },
+            {
+                "name": "MIG",
+                "number": 320,
+                "credits": 18,
+                "modules": [
+                    {
+                        "name": "Einführung in die Technische Informatik",
+                        "number": 14360,
+                        "credits": 6,
+                        "participated_semesters": [
+                            3
+                        ],
+                        "wrote_exam_semesters": [
+                            3
+                        ],
+                        "recommended_semester": 3,
+                        "grade": 1.7
+                    },
+                    {
+                        "name": "Programmentwicklung",
+                        "number": 14390,
+                        "credits": 6,
+                        "participated_semesters": [
+                            3,
+                            4
+                        ],
+                        "wrote_exam_semesters": [
+                            3,
+                            4
+                        ],
+                        "recommended_semester": 3,
+                        "grade": 3.3
+                    }
+                ]
+            }
+        ],
+        "key_qualifications": [
+            {
+                "name": "Medieninformatik Projekt - Praktikum",
+                "number": 56271,
+                "credits": 15
+            },
+            {
+                "name": "English for Computer Science (C1)",
+                "number": 932830,
+                "credits": 3,
+                "participated_semesters": [
+                    3
+                ],
+                "wrote_exam_semesters": [
+                    3
+                ],
+                "grade": 3.0
+            }
+        ]
+    }
+}
