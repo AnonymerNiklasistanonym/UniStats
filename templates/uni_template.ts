@@ -17,6 +17,23 @@ export interface UniTemplate {
    */
   current_semester: number;
   /**
+   * The title of the document/Titel des Dokuments
+   */
+  title: string;
+  /**
+   * Your start year/Dein Startjahr
+   */
+  start_year: {
+    /**
+     * Your start year/Dein Startjahr
+     */
+    year: number;
+    /**
+     * Your start semester/Dein Startsemester
+     */
+    semester: "WS" | "SS";
+  };
+  /**
    * Your field of study/Dein Studiengang bzw. -fach
    */
   field_of_study: string;
@@ -61,7 +78,7 @@ export interface UniTemplate {
   /**
    * The needed ETCS credits/Die zu erreichenden ETCS Credits
    */
-  needed_credits?: number;
+  needed_credits: number;
 }
 /**
  * A module/Ein Modul

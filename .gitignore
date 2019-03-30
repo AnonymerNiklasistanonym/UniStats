@@ -87,3 +87,4 @@ data/uni.json
 
 # Ignore dist output
 dist/*
+data/table.html

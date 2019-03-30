@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/schema#",
+    "$schema": "http://json-schema.org/draft-04/schema#",
     "additionalProperties": false,
     "definitions": {
         "module": {
@@ -100,6 +100,26 @@
             "description": "Your current semeser/Dein aktuelles Semester",
             "type": "integer"
         },
+        "title": {
+            "description": "The title of the document/Titel des Dokuments",
+            "type": "string"
+        },
+        "start_year": {
+            "additionalProperties": false,
+            "description": "Your start year/Dein Startjahr",
+            "required": ["year", "semester"],
+            "properties": {
+                "year": {
+                    "description": "Your start year/Dein Startjahr",
+                    "type": "integer"
+                },
+                "semester": {
+                    "description": "Your start semester/Dein Startsemester",
+                    "type": "string",
+                    "enum": ["WS", "SS"]
+                }
+            }
+        },
         "field_of_study": {
             "description": "Your field of study/Dein Studiengang bzw. -fach",
             "type": "string"
@@ -181,7 +201,10 @@
         "matriculation_number",
         "current_semester",
         "field_of_study",
-        "name"
+        "name",
+        "start_year",
+        "title",
+        "needed_credits"
     ],
     "type": "object"
 }

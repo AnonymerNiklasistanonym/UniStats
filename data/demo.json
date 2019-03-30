@@ -1,5 +1,5 @@
 {
-    "$schema": "./uni_template.json",
+    "$schema": "../templates/uni_template.json",
     "field_of_study": "Medieninformatik",
     "matriculation_number": 123456,
     "name": {
@@ -8,6 +8,11 @@
     },
     "current_semester": 5,
     "needed_credits": 180,
+    "title": "Bachelor Medieninformatik",
+    "start_year": {
+        "year": 2016,
+        "semester": "WS"
+    },
     "modules": {
         "base": [
             {

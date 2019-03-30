@@ -1,0 +1,89 @@
+html {
+    font-family: arial, sans-serif;
+}
+
+h3 {
+    float: left;
+}
+
+h4 {
+    float: right;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 0.4em;
+}
+
+table>tbody>tr>th {
+    background-color: #acacac;
+}
+
+table>tbody>tr>td:first-child>div>p.title {
+    margin: 0;
+}
+
+table>tbody>tr>td:first-child>div>p.number {
+    margin: 0;
+    font-size: smaller;
+    color: grey;
+}
+
+table>tbody>tr>td.recommended>div.a,
+table>tbody>tr>td.participated>div.a,
+table>tbody>tr>td.wrote_exam>div.a,
+table>tbody>tr>td.failed_exam>div.a {
+    float: left;
+}
+
+table>tbody>tr>td.recommended>div.c,
+table>tbody>tr>td.participated>div.c,
+table>tbody>tr>td.wrote_exam>div.c,
+table>tbody>tr>td.failed_exam>div.c {
+    margin-top: 25px;
+}
+
+table>tbody>tr>td.recommended>div.b,
+table>tbody>tr>td.participated>div.b,
+table>tbody>tr>td.wrote_exam>div.b,
+table>tbody>tr>td.failed_exam>div.b {
+    float: right;
+}
+
+table>tbody>tr>td.recommended>div,
+table>tbody>tr>td.participated>div,
+table>tbody>tr>td.wrote_exam>div,
+table>tbody>tr>td.failed_exam>div {
+    width: 20px;
+    height: 20px;
+    -webkit-print-color-adjust: exact;
+    /* display: inline-block; */
+}
+
+
+table>tbody>tr>td.recommended>div.c {
+    background-color: black;
+}
+
+table>tbody>tr>td.failed_exam>div.b {
+    background-color: red;
+}
+
+table>tbody>tr>td.wrote_exam>div.b {
+    background-color: green;
+}
+
+table>tbody>tr>td.participated>div.a {
+    background-color: orange;
+}
+
+tbody>tr:nth-child(even) {
+    background-color: #dddddd;
+}
