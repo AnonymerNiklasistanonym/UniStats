@@ -90,5 +90,4 @@ dist/*
 data/table.html
 
 # Ignore doc output
-
 docs/typedoc

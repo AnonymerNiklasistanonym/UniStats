@@ -76,7 +76,7 @@ const examTryCount: IExamTryCount = {
  * @param semester Semester which should be checked
  */
 function getClassesOfSemesterOfModule(module: Module,
-    semester: number): string[] {
+                                      semester: number): string[] {
     const classes: string[] = [];
     if (module.recommended_semester !== undefined &&
         module.recommended_semester === semester) {
@@ -105,14 +105,71 @@ const semesterCount: number = demoData.current_semester;
 const semesterList: number[] = range(semesterCount, 1);
 
 /**
+ * Get the sum of achieved credits of a list of modules
+ * @param modules The module list which should be analyzed
+ */
+function getModuleAchievedCreditSum(modules: Module[]): number {
+    return modules.filter((a) => a.grade !== undefined)
+        .reduce((sum, currentModule) => sum + currentModule.credits, 0);
+}
+
+/**
+ * Get the sum of all credits of a list of modules
+ * @param modules The module list which should be analyzed
+ */
+function getModuleCreditSum(modules: Module[]): number {
+    return modules.reduce((sum, currentModule) => sum + currentModule.credits,
+                          0);
+}
+
+/**
+ * Get the average of achieved grades of a list of modules
+ * @param modules The module list which should be analyzed
+ */
+function getModuleGradeAverage(modules: Module[]): number {
+    const moduleCreditSum: number = getModuleAchievedCreditSum(modules);
+
+    return modules.filter((a) => a.grade !== undefined)
+        .reduce((sum, currentModule) => sum +
+            // @ts-ignore: Object is possibly 'undefined'
+            (currentModule.grade / moduleCreditSum) * currentModule.credits,
+                0);
+}
+
+/**
+ * Get the average of achieved grades of a list of modules
+ * @param modules The module list which should be analyzed
+ * @param neededCredits Optional needed credits, else the sum is taken
+ */
+function getProgressOfModuleList(modules: Module[],
+                                 neededCredits?: number): string {
+    const whole: number = neededCredits !== undefined
+        ? neededCredits : getModuleCreditSum(modules);
+    const gradeAverage: number = getModuleGradeAverage(modules);
+    const creditSum: number = getModuleAchievedCreditSum(modules);
+    const progress: IProgressCalculator = progressCalculator(creditSum,
+                                                             whole, 0);
+
+    return `Progress: ${progress.achieved}/${progress.whole} (${
+        progress.percentage}%), Average grade: ${gradeAverage.toFixed(1)}`;
+}
+
+/**
  * Parse modules to a module section HTML table cells
  * @param modules Modules to parse
  * @param title Title of the module section
  */
 function createModuleSectionForTable(modules: Module[],
-    title: string):
+                                     title: string,
+                                     progress: boolean = true):
     HtmlFunctions.IHtmlTableCell[][] {
-    // TODO Add progress calculator
+    const progressCells: HtmlFunctions.IHtmlTableCell[][] = progress ? [
+        [{
+            classes: ["progress"],
+            colSpan: semesterCount + tableCellCountWoSem,
+            content: getProgressOfModuleList(modules),
+        }],
+    ] : [];
 
     return [
         [{
@@ -124,17 +181,13 @@ function createModuleSectionForTable(modules: Module[],
             .sort((a, b) => b.credits - a.credits)
             .map((module) =>
                 [{ content: HtmlFunctions.createModuleEntry(module) },
-                { content: module.grade !== undefined ? module.grade : "" },
-                { content: module.credits },
-                ...semesterList.map((semester) => ({
+                 { content: module.grade !== undefined ? module.grade : "" },
+                 { content: module.credits },
+                 ...semesterList.map((semester) => ({
                     classes: getClassesOfSemesterOfModule(module, semester),
                     content: tableCssSemesterCell,
                 }))]),
-        [{
-            classes: ["progress"],
-            colSpan: semesterCount + tableCellCountWoSem,
-            content: "Progress: TODO",
-        }],
+        ...progressCells,
     ];
 }
 
@@ -144,9 +197,8 @@ function createModuleSectionForTable(modules: Module[],
  * @param title Title of the catalog section
  */
 function createCatalogSectionsForTable(catalogs: Catalog[],
-    title: string):
+                                       title: string):
     HtmlFunctions.IHtmlTableCell[][] {
-    // TODO Add progress calculator
 
     return [
         [{
@@ -154,14 +206,71 @@ function createCatalogSectionsForTable(catalogs: Catalog[],
             content: `>> ${title}`,
             headerCell: true,
         }],
-        ...catalogs
-            .sort((a, b) => b.credits - a.credits)
+        ...catalogs.sort((a, b) => b.credits - a.credits)
             .filter((a) => a.modules !== undefined)
             .map((catalog) => createModuleSectionForTable(
                 // @ts-ignore: Object is possibly 'undefined'
                 catalog.modules,
-                `${catalog.name} (${catalog.number})`))
+                `${catalog.name} (${catalog.number})`, false)
+                .concat([[{
+                    colSpan: semesterCount + tableCellCountWoSem,
+                    // @ts-ignore: Object is possibly 'undefined'
+                    content: getProgressOfModuleList(catalog.modules,
+                                                     catalog.credits),
+                }]]))
             .reduce((previous, current) => previous.concat(current), []),
+    ];
+}
+
+/**
+ * Contains the credits and grade for each semester
+ */
+interface IProgressCreditsGradeSemester {
+    /**
+     * All the achieved credits of the semester
+     */
+    credits: number;
+    /**
+     * The achieved grade of the semester
+     */
+    grade: number;
+}
+
+/**
+ * Create a semester progress row with some stats
+ * @param tableCellOffset The cell number offset to the semesters
+ * @param semesterCellCount The semesters that should be looked at
+ * @param modules The modules that should be analyzed
+ */
+function createSemesterProgressRow(tableCellOffset: number,
+                                   semesterCellCount: number,
+                                   modules: Module[]):
+                                   HtmlFunctions.IHtmlTableCell[] {
+    const semesters: number[] = range(semesterCellCount, 1);
+    const moduleCreditGradeInfo: IModuleCredit[] = getModuleCredits(moduleData);
+    const semesterStats: string[] = semesters.map((semester) => {
+        const semesterModules: IModuleCredit[] = moduleCreditGradeInfo
+            .filter((moduleInfo) => moduleInfo.grade !== undefined)
+            .filter((moduleInfo) => moduleInfo.semester !== undefined)
+            .filter((moduleInfo) => moduleInfo.semester === semester);
+        const creditSumSemester: number = semesterModules
+            .reduce((sum, currentModule) => sum + currentModule.credits, 0);
+        const credGradeProg: IProgressCreditsGradeSemester = semesterModules
+            .reduce((result: IProgressCreditsGradeSemester,
+                     currentModuleInfo) => ({
+                credits: result.credits + currentModuleInfo.credits,
+                grade: result.grade +
+                    // @ts-ignore: Object is possibly 'undefined'
+                    (currentModuleInfo.grade / creditSumSemester) *
+                    currentModuleInfo.credits,
+                }), { credits: 0, grade: 0 });
+
+        return `${credGradeProg.credits}/${credGradeProg.grade.toFixed(1)}`;
+    });
+
+    return [
+        { content: "", colSpan: tableCellOffset },
+        ...semesterStats.map((progressString) => ({ content: progressString })),
     ];
 }
 
@@ -183,20 +292,22 @@ const htmlTable: string = HtmlFunctions.createTable(
         ...createModuleSectionForTable(demoData.modules.base, "Base modules"),
         ...createModuleSectionForTable(demoData.modules.core, "Core modules"),
         ...createCatalogSectionsForTable(demoData.modules.supplementary,
-            "Supplementary modules"),
+                                         "Supplementary modules"),
         ...createModuleSectionForTable(demoData.modules.key_qualifications,
-            "Key Qualifications"),
+                                       "Key Qualifications"),
+        createSemesterProgressRow(tableCellCountWoSem, semesterCount,
+                                  moduleData),
     ],
 );
 
 const creditProgress: IProgressCalculator =
-    progressCalculator(credits, demoData.needed_credits, 1);
+    progressCalculator(credits, demoData.needed_credits, 0);
 const htmlTableStats: string = HtmlFunctions.createTable([[]], [
     [
         { content: "Currently accumulated credits" },
         {
             content: `${creditProgress.achieved}/${creditProgress.whole} (${
-                creditProgress.percentage}%)`
+                creditProgress.percentage}%)`,
         },
     ],
     [
@@ -225,9 +336,9 @@ const currentIsoDateString: string = new Date().toISOString()
     .slice(0, ISO_DATE_LENGTH);
 const htmlDocument: string = `<!DOCTYPE html><html><head><style>${cssContent
     }</style></head><body><h2>${demoData.title}</h2><h3>${
-    demoData.name.surname}, ${demoData.name.first_name} (${
-    demoData.field_of_study}, ${demoData.current_semester
-    }. semester)</h3><h4>${currentIsoDateString}</h4>${
+    demoData.name.surname}, ${demoData.name.first_name} - ${
+    demoData.matriculation_number} (${demoData.field_of_study}, ${
+    demoData.current_semester}. semester)</h3><h4>${currentIsoDateString}</h4>${
     htmlTable}<br>${htmlTableStats}</body></html>`;
 
 fs.writeFileSync(path.join(__dirname, "../data/table.html"), htmlDocument);

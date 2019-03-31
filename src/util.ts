@@ -39,7 +39,9 @@ export function progressCalculator(achieved: number, whole: number,
                                    decimalPoints: number = 0):
                                    IProgressCalculator {
     const DECIMAL_BASE: number = 10;
-    const ROUNDING_CORRECTION: number = DECIMAL_BASE ** decimalPoints;
+    const PERCENTAGE_TO_INT: number = 2;
+    const ROUNDING_CORRECTION: number = DECIMAL_BASE **
+     (decimalPoints + PERCENTAGE_TO_INT);
 
     return {
         achieved,
