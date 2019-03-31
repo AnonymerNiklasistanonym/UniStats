@@ -57,6 +57,14 @@ table>tbody>tr>td.failed_exam>div.b {
     float: right;
 }
 
+table>tbody>tr>td.recommended,
+table>tbody>tr>td.participated,
+table>tbody>tr>td.wrote_exam,
+table>tbody>tr>td.failed_exam {
+    min-width: 45px;
+    min-height: 45px;
+}
+
 table>tbody>tr>td.recommended>div,
 table>tbody>tr>td.participated>div,
 table>tbody>tr>td.wrote_exam>div,
