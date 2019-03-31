@@ -335,7 +335,7 @@ const ISO_DATE_LENGTH: number = 10;
 const currentIsoDateString: string = new Date().toISOString()
     .slice(0, ISO_DATE_LENGTH);
 const htmlDocument: string = `<!DOCTYPE html><html><head><style>${cssContent
-    }</style></head><body><h2>${demoData.title}</h2><h3>${
+    }</style><meta charset="UTF-8"></head><body><h2>${demoData.title}</h2><h3>${
     demoData.name.surname}, ${demoData.name.first_name} - ${
     demoData.matriculation_number} (${demoData.field_of_study}, ${
     demoData.current_semester}. semester)</h3><h4>${currentIsoDateString}</h4>${
