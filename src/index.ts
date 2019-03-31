@@ -22,9 +22,12 @@ import {
     range,
 } from "./util";
 
-const demoDataFilePath: string = path.join(__dirname, "../data/uni.json");
-const demoData: UniTemplate = JSON.parse(
-    fs.readFileSync(demoDataFilePath, "utf8")) as UniTemplate;
+const demoDataFilePath: string = path.join(__dirname, "../data/demo.json");
+const customDataFilePath: string = path.join(__dirname, "../data/uni.json");
+
+const demoData: UniTemplate = JSON.parse(fs.readFileSync(
+    fs.existsSync(customDataFilePath) ? customDataFilePath : demoDataFilePath,
+    "utf8")) as UniTemplate;
 
 if (demoData.modules === undefined) {
     throw Error("This only works if you have some modules defined");
@@ -73,7 +76,7 @@ const examTryCount: IExamTryCount = {
  * @param semester Semester which should be checked
  */
 function getClassesOfSemesterOfModule(module: Module,
-                                      semester: number): string[] {
+    semester: number): string[] {
     const classes: string[] = [];
     if (module.recommended_semester !== undefined &&
         module.recommended_semester === semester) {
@@ -107,8 +110,8 @@ const semesterList: number[] = range(semesterCount, 1);
  * @param title Title of the module section
  */
 function createModuleSectionForTable(modules: Module[],
-                                     title: string):
-                                     HtmlFunctions.IHtmlTableCell[][] {
+    title: string):
+    HtmlFunctions.IHtmlTableCell[][] {
     // TODO Add progress calculator
 
     return [
@@ -121,9 +124,9 @@ function createModuleSectionForTable(modules: Module[],
             .sort((a, b) => b.credits - a.credits)
             .map((module) =>
                 [{ content: HtmlFunctions.createModuleEntry(module) },
-                 { content: module.grade !== undefined ? module.grade : "" },
-                 { content: module.credits },
-                 ...semesterList.map((semester) => ({
+                { content: module.grade !== undefined ? module.grade : "" },
+                { content: module.credits },
+                ...semesterList.map((semester) => ({
                     classes: getClassesOfSemesterOfModule(module, semester),
                     content: tableCssSemesterCell,
                 }))]),
@@ -141,8 +144,8 @@ function createModuleSectionForTable(modules: Module[],
  * @param title Title of the catalog section
  */
 function createCatalogSectionsForTable(catalogs: Catalog[],
-                                       title: string):
-                                       HtmlFunctions.IHtmlTableCell[][] {
+    title: string):
+    HtmlFunctions.IHtmlTableCell[][] {
     // TODO Add progress calculator
 
     return [
@@ -180,9 +183,9 @@ const htmlTable: string = HtmlFunctions.createTable(
         ...createModuleSectionForTable(demoData.modules.base, "Base modules"),
         ...createModuleSectionForTable(demoData.modules.core, "Core modules"),
         ...createCatalogSectionsForTable(demoData.modules.supplementary,
-                                         "Supplementary modules"),
+            "Supplementary modules"),
         ...createModuleSectionForTable(demoData.modules.key_qualifications,
-                                       "Key Qualifications"),
+            "Key Qualifications"),
     ],
 );
 
@@ -191,8 +194,10 @@ const creditProgress: IProgressCalculator =
 const htmlTableStats: string = HtmlFunctions.createTable([[]], [
     [
         { content: "Currently accumulated credits" },
-        { content: `${creditProgress.achieved}/${creditProgress.whole} (${
-            creditProgress.percentage}%)` },
+        {
+            content: `${creditProgress.achieved}/${creditProgress.whole} (${
+                creditProgress.percentage}%)`
+        },
     ],
     [
         { content: "Currently calculated grade" },
