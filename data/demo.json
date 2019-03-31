@@ -133,6 +133,9 @@
                 "participated_semesters": [
                     3
                 ],
+                "wrote_exam_semesters": [
+                    3
+                ],
                 "recommended_semester": 3,
                 "grade": 3.7
             },

@@ -22,5 +22,5 @@ npm start
 
 ```sh
 cd templates
-sh ./create_ts_type_from_json_schema.sh
+sh ./createTsTypeFromJsonSchema.sh
 ```

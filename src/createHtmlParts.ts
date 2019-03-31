@@ -1,39 +1,77 @@
-import { UniTemplate, Module } from "../templates/uni_template"
+import { Module } from "../templates/uni_template";
 
-export namespace HtmlFunction {
+/**
+ * HTML table cell structure
+ */
+export interface IHtmlTableCell {
+    /**
+     * Classes of the `td` tag
+     * @example <td class="a b c"></td>
+     */
+    classes?: string[];
+    /**
+     * `colspan` of the `td` tag
+     * @example <td colspan="#"></td>
+     */
+    colSpan?: number;
+    /**
+     * The content of the table cell
+     */
+    content: string | number;
+    /**
+     * Is it a header cell (then use `th` tag, else use `td` tag)
+     */
+    headerCell?: boolean;
+    /**
+     * `rowspan` of the `td` tag
+     * @example <td rowspan="#"></td>
+     */
+    rowSpan?: number;
+}
 
-    export interface HtmlTableCell {
-        content: string | number;
-        rowSpan?: number;
-        colSpan?: number;
-        classes?: string[];
-        headerCell?: boolean;
-    }
+/**
+ * HTML module cell entry parser
+ * @param cell The cell structure on which basis the HTML should be parsed
+ */
+export function createCellEntry(cell: IHtmlTableCell): string {
+    const rowSpan: string = cell.rowSpan !== undefined
+        ? ` rowspan="${cell.rowSpan}"` : "";
+    const colSpan: string = cell.colSpan !== undefined
+        ? ` colspan="${cell.colSpan}"` : "";
+    const classes: string =
+        (cell.classes !== undefined && cell.classes.length > 0)
+            ? ` class="${cell.classes.join(" ")}"` : "";
+    const tagName: string =
+        (cell.headerCell !== undefined && cell.headerCell)
+            ? "th" : "td";
 
-    export function createModuleEntry(module: Module) {
-        return "<div>" + `<p class="title">${module.name}</p>` +
-            `<p class="number">${module.number}</p>` + "</div>"
-    }
+    return `<${tagName}${rowSpan}${colSpan}${classes}>${cell.content
+        }</${tagName}>`;
+}
 
-    export function createCellEntry(cell: HtmlTableCell) {
-        const rowSpan = cell.rowSpan !== undefined
-            ? ` rowspan="${cell.rowSpan}"` : ""
-        const colSpan = cell.colSpan !== undefined
-            ? ` colspan="${cell.colSpan}"` : ""
-        const classes = (cell.classes !== undefined && cell.classes.length > 0)
-            ? ` class="${cell.classes.join(" ")}"` : ""
-        const tagName = cell.headerCell !== undefined && cell.headerCell ? "th" : "td"
-        return `<${tagName}${rowSpan}${colSpan}${classes}>${cell.content}</${tagName}>`
-    }
+/**
+ * HTML table (cells) parser
+ * @param header The header `thead` cells structure
+ * @param body The body `tbody` cells structure
+ */
+export function createTable(header: IHtmlTableCell[][],
+                            body: IHtmlTableCell[][]): string {
+    const tableHeader: string = header
+        .map((row) => `<tr>${row.map(createCellEntry).join("")}</tr>`)
+        .join("");
+    const tableBody: string = body
+        .map((row) => `<tr>${row.map(createCellEntry).join("")}</tr>`)
+        .join("");
 
-    export function createTable(header: HtmlTableCell[][], body: HtmlTableCell[][]) {
-        const table_header = "<thead>" +
-            header.map(row => "<tr>" + row.map(cell => createCellEntry(cell)).join("") + "</tr>").join("") +
-            "</thead>"
-        const table_body = "<tbody>" +
-            body.map(row => "<tr>" + row.map(cell => createCellEntry(cell)).join("") + "</tr>").join("") +
-            "</tbody>"
-        return "<table>" + table_header + table_body + "</table>"
-    }
+    return `<table><thead>${tableHeader}</thead><tbody>${tableBody
+        }</tbody></table>`;
+}
 
+/**
+ * HTML module entry structure creator
+ * @param module The module of which such a structure should be created
+ */
+export function createModuleEntry(module: Module): string {
+    return "<div>" + `<p class="title">${module.name}</p>` +
+        `<p class="number">${module.number}</p>` + "</div>";
 }
