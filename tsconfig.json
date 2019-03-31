@@ -18,5 +18,13 @@
     },
     "include": [
         "src/**/*"
-    ]
+    ],
+    "typedocOptions": {
+      "ignoreCompilerErrors": true,
+      "mode": "file",
+      "out": "./docs/typedoc",
+      "name": "UniStats",
+      "readme": "./docs/DOCS_README_TYPEDOC.md",
+      "verbose": true
+    }
 }

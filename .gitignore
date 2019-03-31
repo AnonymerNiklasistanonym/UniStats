@@ -88,3 +88,7 @@ data/uni.json
 # Ignore dist output
 dist/*
 data/table.html
+
+# Ignore doc output
+
+docs/typedoc
