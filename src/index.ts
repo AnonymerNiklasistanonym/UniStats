@@ -183,11 +183,15 @@ function createModuleGroupSectionForTable(moduleGroup: ModuleGroup,
                                           progress: boolean = true):
                                           HtmlFunctions.IHtmlTableCell[][] {
     const modules: IModuleWithInfo[] = getModules([ moduleGroup ]);
+    const neededCredits: number = (moduleGroup.catalogs !== undefined ?
+        moduleGroup.catalogs.reduce((sum, catalog) => sum + catalog.credits, 0)
+        : 0) + (modules.filter((module) => module.info.catalog === undefined)
+        .reduce((sum, module) => sum + module.credits, 0));
     const progressCells: HtmlFunctions.IHtmlTableCell[][] = progress ? [
         [{
             classes: ["progress", "module_group"],
             colSpan: semesterCount + tableCellCountWoSem,
-            content: getProgressOfModuleList(modules),
+            content: getProgressOfModuleList(modules, neededCredits),
         }],
     ] : [];
     const catalogs: HtmlFunctions.IHtmlTableCell[][][] =
@@ -345,7 +349,8 @@ const htmlTableStats: string = HtmlFunctions.createTable([[]], [
 
 const cssFilePath: string = path
     .join(__dirname, "../templates/default_table_style.css");
-const cssContent: string = fs.readFileSync(cssFilePath, "utf8");
+const cssContent: string = fs.readFileSync(cssFilePath, "utf8")
+    .replace(/(?:\r\n|\r|\n|\s)/g, "");
 const ISO_DATE_LENGTH: number = 10;
 const currentIsoDateString: string = new Date().toISOString()
     .slice(0, ISO_DATE_LENGTH);
