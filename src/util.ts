@@ -50,3 +50,12 @@ export function progressCalculator(achieved: number, whole: number,
         whole,
     };
 }
+
+/**
+ * Flatten an array
+ * @param array Array that should be flattened
+ * @example flattenArray([[1,2,3],[4,5,6]]) === [1,2,3,4,5,6]
+ */
+export function flattenArray<T>(array: T[][]): T[] {
+    return Array<T>().concat.apply([], array);
+}

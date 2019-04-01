@@ -42,26 +42,9 @@ export interface UniTemplate {
    */
   matriculation_number: number;
   /**
-   * Your modules/Deine Module
+   * Your module groups/Deine Modulgruppen
    */
-  modules?: {
-    /**
-     * Your base modules/Deine Basismodule
-     */
-    base: Module[];
-    /**
-     * Your core modules/Deine Kernmodule
-     */
-    core: Module[];
-    /**
-     * Your key_qualifications/Deine Schlüsselqualifikationen
-     */
-    key_qualifications: Module[];
-    /**
-     * Your supplementary modules/Deine Ergänzungsmodule
-     */
-    supplementary: Catalog[];
-  };
+  module_groups: ModuleGroup[];
   /**
    * Your name/Dein Name
    */
@@ -79,6 +62,23 @@ export interface UniTemplate {
    * The needed ETCS credits/Die zu erreichenden ETCS Credits
    */
   needed_credits: number;
+}
+/**
+ * A group of modules/Ein Gruppe von Modulen
+ */
+export interface ModuleGroup {
+  /**
+   * Module group name/Modulgruppenname
+   */
+  name: string;
+  /**
+   * Module group modules/Modulgruppen Module
+   */
+  modules?: Module[];
+  /**
+   * Catalogs/Kataloge
+   */
+  catalogs?: Catalog[];
 }
 /**
  * A module/Ein Modul

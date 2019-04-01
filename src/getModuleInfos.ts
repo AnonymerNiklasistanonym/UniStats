@@ -1,4 +1,13 @@
-import { Catalog, Module, UniTemplate } from "../templates/uni_template";
+import {
+    Catalog,
+    Module,
+    ModuleGroup,
+    UniTemplate,
+} from "../templates/uni_template";
+
+import {
+    flattenArray,
+} from "./util";
 
 /**
  * Catalog information
@@ -25,7 +34,7 @@ export interface IModuleInfo {
     /**
      * Section name
      */
-    section: "base" | "core" | "supplementary" | "key_qualifications";
+    section: string;
 }
 
 /**
@@ -55,13 +64,14 @@ function mapModuleToModuleWithInfo(module: Module,
  * Map catalog to a list of modules with module/catalog information
  * @param catalog The catalog that should be mapped
  */
-function mapCatalogToModulesWithInfo(catalog: Catalog): IModuleWithInfo[] {
+function mapCatalogToModulesWithInfo(catalog: Catalog,
+                                     section: string): IModuleWithInfo[] {
     if (catalog.modules === undefined) {
         throw Error("The catalog does not contain any modules!");
     }
 
     return catalog.modules.map((module) => mapModuleToModuleWithInfo(
-        module, "supplementary",
+        module, section,
         { name: catalog.name, number: catalog.number }));
 }
 
@@ -69,23 +79,21 @@ function mapCatalogToModulesWithInfo(catalog: Catalog): IModuleWithInfo[] {
  * Map all modules to a list of modules with module/catalog information
  * @param modules The modules of the source JSON file that should be mapped
  */
-export function getModules(modules: UniTemplate["modules"]): IModuleWithInfo[] {
-    if (modules === undefined) {
-        throw Error("The JSON modules section was undefined!");
-    }
-
-    return [
-        ...modules.base
-            .map((module) => mapModuleToModuleWithInfo(module, "base")),
-        ...modules.core
-            .map((module) => mapModuleToModuleWithInfo(module, "core")),
-        ...modules.key_qualifications
-            .map((module) => mapModuleToModuleWithInfo(
-                module, "key_qualifications")),
-        // Change to array.flat(1) if this is integrated into Nodejs
-        ...Array<IModuleWithInfo>().concat.apply([], modules.supplementary
-            .map(mapCatalogToModulesWithInfo)),
-    ];
+export function getModules(moduleGroups: ModuleGroup[]): IModuleWithInfo[] {
+    return flattenArray([
+        ...moduleGroups
+            .filter((moduleGroup) => moduleGroup.modules !== undefined)
+            // @ts-ignore: Object is possibly 'undefined'
+            .map((moduleGroup) => moduleGroup.modules
+                .map((module) => mapModuleToModuleWithInfo(
+                    module, moduleGroup.name))),
+        ...moduleGroups
+            .filter((moduleGroup) => moduleGroup.catalogs !== undefined)
+            // @ts-ignore: Object is possibly 'undefined'
+            .map((moduleGroup) => flattenArray(moduleGroup.catalogs
+                .map((catalog) => mapCatalogToModulesWithInfo(
+                    catalog, moduleGroup.name)))),
+        ]);
 }
 
 /**

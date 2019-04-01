@@ -58,6 +58,34 @@
             ],
             "type": "object"
         },
+        "module_group": {
+            "additionalProperties": false,
+            "description": "A group of modules/Ein Gruppe von Modulen",
+            "properties": {
+                "name": {
+                    "description": "Module group name/Modulgruppenname",
+                    "type": "string"
+                },
+                "modules": {
+                    "description": "Module group modules/Modulgruppen Module",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/module"
+                    }
+                },
+                "catalogs": {
+                    "description": "Catalogs/Kataloge",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/catalog"
+                    }
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
         "catalog": {
             "additionalProperties": false,
             "description": "A catalog/Ein Katalog",
@@ -128,50 +156,13 @@
             "description": "The matriculation_number/Die Matrikelnummer",
             "type": "integer"
         },
-        "modules": {
-            "additionalProperties": false,
-            "description": "Your modules/Deine Module",
-            "properties": {
-                "base": {
-                    "uniqueItems": true,
-                    "description": "Your base modules/Deine Basismodule",
-                    "items": {
-                        "$ref": "#/definitions/module"
-                    },
-                    "type": "array"
-                },
-                "core": {
-                    "description": "Your core modules/Deine Kernmodule",
-                    "uniqueItems": true,
-                    "items": {
-                        "$ref": "#/definitions/module"
-                    },
-                    "type": "array"
-                },
-                "key_qualifications": {
-                    "description": "Your key_qualifications/Deine Schlüsselqualifikationen",
-                    "uniqueItems": true,
-                    "items": {
-                        "$ref": "#/definitions/module"
-                    },
-                    "type": "array"
-                },
-                "supplementary": {
-                    "description": "Your supplementary modules/Deine Ergänzungsmodule",
-                    "uniqueItems": true,
-                    "items": {
-                        "$ref": "#/definitions/catalog"
-                    },
-                    "type": "array"
-                }
+        "module_groups": {
+            "uniqueItems": true,
+            "description": "Your module groups/Deine Modulgruppen",
+            "items": {
+                "$ref": "#/definitions/module_group"
             },
-            "required": [
-                "base",
-                "core",
-                "supplementary",
-                "key_qualifications"
-            ],
-            "type": "object"
+            "type": "array"
         },
         "name": {
             "additionalProperties": false,
@@ -204,7 +195,8 @@
         "name",
         "start_year",
         "title",
-        "needed_credits"
+        "needed_credits",
+        "module_groups"
     ],
     "type": "object"
 }

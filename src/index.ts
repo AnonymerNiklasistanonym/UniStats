@@ -4,6 +4,7 @@ import * as path from "path";
 import {
     Catalog,
     Module,
+    ModuleGroup,
     UniTemplate,
 } from "../templates/uni_template";
 
@@ -17,6 +18,7 @@ import {
     IModuleWithInfo,
 } from "./getModuleInfos";
 import {
+    flattenArray,
     IProgressCalculator,
     progressCalculator,
     range,
@@ -29,11 +31,12 @@ const demoData: UniTemplate = JSON.parse(fs.readFileSync(
     fs.existsSync(customDataFilePath) ? customDataFilePath : demoDataFilePath,
     "utf8")) as UniTemplate;
 
-if (demoData.modules === undefined) {
+if (!(demoData.module_groups.some((a) => a.modules !== undefined) ||
+    demoData.module_groups.some((a) => a.catalogs !== undefined))) {
     throw Error("This only works if you have some modules defined");
 }
 
-const moduleData: IModuleWithInfo[] = getModules(demoData.modules);
+const moduleData: IModuleWithInfo[] = getModules(demoData.module_groups);
 const moduleDataCredits: IModuleCredit[] = getModuleCredits(moduleData);
 const moduleDataExamTries: IModuleExamTries[] = getModuleExamTries(moduleData);
 
@@ -155,38 +158,56 @@ function getProgressOfModuleList(modules: Module[],
 }
 
 /**
+ * Parse module to a row of HTML table cells
+ * @param module Modules to parse
+ */
+function createModuleRowForTable(module: Module):
+     HtmlFunctions.IHtmlTableCell[] {
+        return [
+            { content: HtmlFunctions.createModuleEntry(module) },
+            { content: module.grade !== undefined ? module.grade : "" },
+            { content: module.credits },
+            ...semesterList.map((semester) => ({
+               classes: getClassesOfSemesterOfModule(module, semester),
+               content: tableCssSemesterCell,
+           })),
+        ];
+}
+
+/**
  * Parse modules to a module section HTML table cells
  * @param modules Modules to parse
  * @param title Title of the module section
  */
-function createModuleSectionForTable(modules: Module[],
-                                     title: string,
-                                     progress: boolean = true):
-    HtmlFunctions.IHtmlTableCell[][] {
+function createModuleGroupSectionForTable(moduleGroup: ModuleGroup,
+                                          progress: boolean = true):
+                                          HtmlFunctions.IHtmlTableCell[][] {
+    const modules: IModuleWithInfo[] = getModules([ moduleGroup ]);
     const progressCells: HtmlFunctions.IHtmlTableCell[][] = progress ? [
         [{
-            classes: ["progress"],
+            classes: ["progress", "module_group"],
             colSpan: semesterCount + tableCellCountWoSem,
             content: getProgressOfModuleList(modules),
         }],
     ] : [];
+    const catalogs: HtmlFunctions.IHtmlTableCell[][][] =
+        (moduleGroup.catalogs !== undefined) ? moduleGroup.catalogs
+            .sort((a, b) => b.credits - a.credits)
+            .map((catalog) => createCatalogSectionsForTable(catalog, progress))
+            : [[]];
 
     return [
         [{
             colSpan: semesterCount + tableCellCountWoSem,
-            content: `> ${title}`,
+            content: `> ${moduleGroup.name}`,
             headerCell: true,
         }],
         ...modules
+            // Remove all catalog modules
+            .filter((a) => a.info.catalog === undefined)
             .sort((a, b) => b.credits - a.credits)
-            .map((module) =>
-                [{ content: HtmlFunctions.createModuleEntry(module) },
-                 { content: module.grade !== undefined ? module.grade : "" },
-                 { content: module.credits },
-                 ...semesterList.map((semester) => ({
-                    classes: getClassesOfSemesterOfModule(module, semester),
-                    content: tableCssSemesterCell,
-                }))]),
+            .map(createModuleRowForTable),
+        ...flattenArray(catalogs),
         ...progressCells,
     ];
 }
@@ -196,29 +217,27 @@ function createModuleSectionForTable(modules: Module[],
  * @param catalogs Catalogs to parse
  * @param title Title of the catalog section
  */
-function createCatalogSectionsForTable(catalogs: Catalog[],
-                                       title: string):
+function createCatalogSectionsForTable(catalog: Catalog,
+                                       progress: boolean = true):
     HtmlFunctions.IHtmlTableCell[][] {
+    const modules: Module[] = catalog.modules !== undefined
+        ? catalog.modules : [];
+    const progressCells: HtmlFunctions.IHtmlTableCell[][] = progress ? [
+        [{
+            classes: ["progress", "module_group_catalog"],
+            colSpan: semesterCount + tableCellCountWoSem,
+            content: getProgressOfModuleList(modules, catalog.credits),
+        }],
+    ] : [];
 
     return [
         [{
             colSpan: semesterCount + tableCellCountWoSem,
-            content: `>> ${title}`,
+            content: `>> ${catalog.name} (${catalog.number})`,
             headerCell: true,
         }],
-        ...catalogs.sort((a, b) => b.credits - a.credits)
-            .filter((a) => a.modules !== undefined)
-            .map((catalog) => createModuleSectionForTable(
-                // @ts-ignore: Object is possibly 'undefined'
-                catalog.modules,
-                `${catalog.name} (${catalog.number})`, false)
-                .concat([[{
-                    colSpan: semesterCount + tableCellCountWoSem,
-                    // @ts-ignore: Object is possibly 'undefined'
-                    content: getProgressOfModuleList(catalog.modules,
-                                                     catalog.credits),
-                }]]))
-            .reduce((previous, current) => previous.concat(current), []),
+        ...modules.map(createModuleRowForTable),
+        ...progressCells,
     ];
 }
 
@@ -289,12 +308,8 @@ const htmlTable: string = HtmlFunctions.createTable(
         ],
     ],
     [
-        ...createModuleSectionForTable(demoData.modules.base, "Base modules"),
-        ...createModuleSectionForTable(demoData.modules.core, "Core modules"),
-        ...createCatalogSectionsForTable(demoData.modules.supplementary,
-                                         "Supplementary modules"),
-        ...createModuleSectionForTable(demoData.modules.key_qualifications,
-                                       "Key Qualifications"),
+        ...flattenArray(demoData.module_groups.map((moduleGroup) =>
+            createModuleGroupSectionForTable(moduleGroup, true))),
         createSemesterProgressRow(tableCellCountWoSem, semesterCount,
                                   moduleData),
     ],
