@@ -11,10 +11,13 @@
   "url": "https://github.com/AnonymerNiklasistanonym/UniStats",
   "scripts": {
     "start": "npm run build:live",
-    "build": "tsc -p .",
+    "build": "tsc -p . && npm run copy-static-assets",
+    "build_on_update": "tsc -w -p .",
+    "start_js": "node dist/src/index.js",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec ./node_modules/.bin/ts-node src/index.ts",
     "tslint": "./node_modules/.bin/tslint -c tslint.json -p tsconfig.json --fix",
-    "typedoc": "./node_modules/.bin/typedoc --tsconfig ./tsconfig.json"
+    "typedoc": "./node_modules/.bin/typedoc --tsconfig ./tsconfig.json",
+    "copy-static-assets": "ts-node copyStaticAssets.ts"
   },
   "dependencies": {
     "json-schema-to-typescript": "^6.1.3"

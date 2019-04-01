@@ -14,10 +14,13 @@
                 "src/types/*"
             ]
         },
-        "strict": true
+        "strict": true,
+        "declaration": true
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "templates/uni_template.ts",
+        "templates/default_table_style.css"
     ],
     "typedocOptions": {
       "ignoreCompilerErrors": true,

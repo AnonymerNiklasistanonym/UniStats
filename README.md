@@ -41,3 +41,17 @@ npm start
 cd templates
 sh ./createTsTypeFromJsonSchema.sh
 ```
+
+## Export to JavaScript
+
+You need to first compile it and copy the source files to the `dist` directory:
+
+```sh
+npm run build
+```
+
+An then you can run the app really fast by executing:
+
+```sh
+npm run start_js
+```
