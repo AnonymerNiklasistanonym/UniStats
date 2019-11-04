@@ -361,4 +361,6 @@ const htmlDocument: string = `<!DOCTYPE html><html><head><style>${cssContent
     demoData.current_semester}. semester)</h3><h4>${currentIsoDateString}</h4>${
     htmlTable}<br>${htmlTableStats}</body></html>`;
 
-fs.writeFileSync(path.join(__dirname, "../data/table.html"), htmlDocument);
+const tableFilePath: string = path.join(__dirname, "../data/table.html")
+fs.writeFileSync(tableFilePath, htmlDocument);
+console.info(`HTML table was written to ${tableFilePath}`)

@@ -2,5 +2,7 @@
 
 tslint ./createTsTypeFromJsonSchema.ts --fix
 tsc ./createTsTypeFromJsonSchema.ts
-node ./createTsTypeFromJsonSchema.js
+cd ..
+npm run createTsTypeFromJsonSchema
+cd templates
 rm ./createTsTypeFromJsonSchema.js
