@@ -1,5 +1,5 @@
 {
-    "$schema": "../templates/uni_template.json",
+    "$schema": "../src/templates/uni_template.json",
     "field_of_study": "Medieninformatik",
     "matriculation_number": 123456,
     "name": {
