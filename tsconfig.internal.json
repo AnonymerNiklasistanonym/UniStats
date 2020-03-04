@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig",
+    "include": [
+        "docs/*.ts",
+        "src/templates/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

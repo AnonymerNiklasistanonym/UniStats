@@ -10,26 +10,31 @@
   },
   "url": "https://github.com/AnonymerNiklasistanonym/UniStats",
   "scripts": {
-    "start": "npm run build:live",
-    "build": "tsc -p . && npm run copy-static-assets",
-    "build_on_update": "tsc -w -p .",
-    "start_js": "node dist/src/index.js",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec ./node_modules/.bin/ts-node src/index.ts",
-    "tslint": "./node_modules/.bin/tslint -c tslint.json -p tsconfig.json --fix",
-    "typedoc": "./node_modules/.bin/typedoc --tsconfig ./tsconfig.json",
-    "copy-static-assets": "ts-node copyStaticAssets.ts",
-    "createTsTypeFromJsonSchema": "node templates/createTsTypeFromJsonSchema.js"
+    "build": "npm-run-all lint build:js",
+    "build:js": "tsc -p .",
+    "start": "ts-node src/index.ts",
+    "start:js": "node dist/index.js",
+    "start:live": "nodemon --watch 'src/**/*.ts' --watch 'data/*.json' --exec npm run start",
+    "lint": "eslint -c .eslintrc.js --ext .ts src --fix",
+    "docs": "npm-run-all typedoc",
+    "typedoc": "ts-node ./docs/createDocs",
+    "createTsTypeFromJsonSchema": "ts-node src/templates/createTsTypeFromJsonSchema.ts"
   },
-  "dependencies": {
-    "nodemon": "^1.19.4",
-    "ts-node": "^8.4.1",
-    "json-schema-to-typescript": "^7.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^12.12.5",
-    "tslint": "^6.0.0-beta0",
-    "typescript": "^3.6.4",
-    "typedoc": "^0.15.0",
-    "shelljs": "^0.8.3"
+    "ts-node": "^8.6.2",
+    "@types/node": "^13.7.7",
+    "@types/shelljs": "^0.8.6",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prefer-arrow": "^1.1.7",
+    "json-schema-to-typescript": "^8.1.0",
+    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
+    "shelljs": "^0.8.3",
+    "tslint": "^6.0.0",
+    "typedoc": "^0.16.11",
+    "typescript": "^3.8.3"
   }
 }

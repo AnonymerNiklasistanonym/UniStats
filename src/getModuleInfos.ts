@@ -1,50 +1,49 @@
 import {
     Catalog,
     Module,
-    ModuleGroup,
-    UniTemplate,
-} from "../templates/uni_template";
+    ModuleGroup
+} from "./templates/uni_template";
 
 import {
-    flattenArray,
+    flattenArray
 } from "./util";
 
 /**
  * Catalog information
  */
-export interface ICatalogInfo {
+export interface CatalogInfo {
     /**
      * Catalog name
      */
-    name: string;
+    name: string
     /**
      * Catalog number
      */
-    number: number;
+    catalogNumber: number
 }
 
 /**
  * Module information
  */
-export interface IModuleInfo {
+export interface ModuleInfo {
     /**
      * Catalog information
      */
-    catalog?: ICatalogInfo;
+    catalog?: CatalogInfo
     /**
      * Section name
      */
-    section: string;
+    section: string
 }
 
 /**
  * Module with extra information
  */
-export interface IModuleWithInfo extends Module {
+export interface ModuleWithInfo extends Module {
     /**
      * Additional module info
      */
-    info: IModuleInfo;
+    info: ModuleInfo
 }
 
 /**
@@ -53,124 +52,119 @@ export interface IModuleWithInfo extends Module {
  * @param section The section the module originates from
  * @param catalog The catalog of the module (optional)
  */
-function mapModuleToModuleWithInfo(module: Module,
-                                   section: IModuleInfo["section"],
-                                   catalog?: IModuleInfo["catalog"]):
-    IModuleWithInfo {
+const mapModuleToModuleWithInfo = (module: Module,
+    section: ModuleInfo["section"],
+    catalog?: ModuleInfo["catalog"]): ModuleWithInfo => {
     return { ...module, info: { section, catalog } };
-}
+};
 
 /**
  * Map catalog to a list of modules with module/catalog information
  * @param catalog The catalog that should be mapped
  */
-function mapCatalogToModulesWithInfo(catalog: Catalog,
-                                     section: string): IModuleWithInfo[] {
+const mapCatalogToModulesWithInfo = (catalog: Catalog,
+    section: string): ModuleWithInfo[] => {
     if (catalog.modules === undefined) {
         throw Error("The catalog does not contain any modules!");
     }
 
-    return catalog.modules.map((module) => mapModuleToModuleWithInfo(
-        module, section,
-        { name: catalog.name, number: catalog.number }));
-}
+    return catalog.modules.map((module) => mapModuleToModuleWithInfo(module, section,
+        { name: catalog.name, catalogNumber: catalog.number }));
+};
 
 /**
  * Map all modules to a list of modules with module/catalog information
  * @param modules The modules of the source JSON file that should be mapped
  */
-export function getModules(moduleGroups: ModuleGroup[]): IModuleWithInfo[] {
+export const getModules = (moduleGroups: ModuleGroup[]): ModuleWithInfo[] => {
     return flattenArray([
-        ...moduleGroups
-            .filter((moduleGroup) => moduleGroup.modules !== undefined)
-            // @ts-ignore: Object is possibly 'undefined'
-            .map((moduleGroup) => moduleGroup.modules
-                .map((module) => mapModuleToModuleWithInfo(
-                    module, moduleGroup.name))),
-        ...moduleGroups
-            .filter((moduleGroup) => moduleGroup.catalogs !== undefined)
-            // @ts-ignore: Object is possibly 'undefined'
-            .map((moduleGroup) => flattenArray(moduleGroup.catalogs
-                .map((catalog) => mapCatalogToModulesWithInfo(
-                    catalog, moduleGroup.name)))),
-        ]);
-}
+        ...moduleGroups.reduce((result: ModuleWithInfo[][], moduleGroup) => {
+            if (moduleGroup.modules) {
+                result.push(moduleGroup.modules.map(module => mapModuleToModuleWithInfo(module, moduleGroup.name)));
+            }
+            return result;
+        }, []),
+        ...moduleGroups.reduce((result: ModuleWithInfo[][], moduleGroup) => {
+            if (moduleGroup.catalogs) {
+                result.push(flattenArray(moduleGroup.catalogs
+                    .map(catalog => mapCatalogToModulesWithInfo(catalog, moduleGroup.name))));
+            }
+            return result;
+        }, [])
+    ]);
+};
 
 /**
  * Module with special information surrounding credits
  */
-export interface IModuleCredit {
+export interface ModuleCredit {
     /**
      * ETCS Credits
      */
-    credits: number;
+    credits: number
     /**
      * Exam grade
      */
-    grade?: number;
+    grade?: number
     /**
      * Module information
      */
-    info: IModuleInfo;
+    info: ModuleInfo
     /**
      * The semester the exam was written
      */
-    semester?: number;
+    semester?: number
 }
 
 /**
  * Map a list of modules to a list of credit/grade specified entries
  * @param modules List of modules that should be mapped
  */
-export function getModuleCredits(modules: IModuleWithInfo[]): IModuleCredit[] {
-    return modules.map((currentModule) => {
-        const moduleCredit: IModuleCredit = {
+export const getModuleCredits = (modules: ModuleWithInfo[]): ModuleCredit[] =>
+    modules.map((currentModule) => {
+        const moduleCredit: ModuleCredit = {
             credits: currentModule.credits,
-            info: currentModule.info,
+            info: currentModule.info
         };
         if (currentModule.grade !== undefined) {
             moduleCredit.grade = currentModule.grade;
             if (currentModule.wrote_exam_semesters === undefined ||
                 currentModule.wrote_exam_semesters.length <= 0) {
-                throw Error(`Exam was never written but a grade was found! ${
-                    JSON.stringify(currentModule)}`);
+                throw Error(`Exam was never written but a grade was found! ${JSON.stringify(currentModule)}`);
             }
-            moduleCredit.semester = Math
-                .max(...currentModule.wrote_exam_semesters);
+            moduleCredit.semester = Math.max(...currentModule.wrote_exam_semesters);
         }
 
         return moduleCredit;
     });
-}
 
 /**
  * Module with special information surrounding exam tries
  */
-export interface IModuleExamTries {
+export interface ModuleExamTries {
     /**
      * Module information
      */
-    info: IModuleInfo;
+    info: ModuleInfo
     /**
      * The semesters the tries were tried
      */
-    semesters?: number[];
+    semesters?: number[]
     /**
      * Number of tries to write the exam
      */
-    tries: number;
+    tries: number
 }
 
 /**
  * Map a list of modules to a list of exam tries specified entries
  * @param modules List of modules that should be mapped
  */
-export function getModuleExamTries(modules: IModuleWithInfo[]):
-    IModuleExamTries[] {
-    return modules.map((currentModule) => {
-        const moduleExamTries: IModuleExamTries = {
+export const getModuleExamTries = (modules: ModuleWithInfo[]): ModuleExamTries[] =>
+    modules.map((currentModule) => {
+        const moduleExamTries: ModuleExamTries = {
             info: currentModule.info,
-            tries: 0,
+            tries: 0
         };
         if (currentModule.wrote_exam_semesters !== undefined) {
             moduleExamTries.tries = currentModule.wrote_exam_semesters.length;
@@ -180,4 +174,3 @@ export function getModuleExamTries(modules: IModuleWithInfo[]):
 
         return moduleExamTries;
     });
-}

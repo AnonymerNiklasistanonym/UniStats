@@ -3,30 +3,29 @@
  * @param size The size of the list/array to be created
  * @param startAt The index from which the list should start
  */
-export function range(size: number, startAt: number = 0): number[] {
-    return [...Array(size).keys()].map((i: number) => i + startAt);
-}
+export const range = (size: number, startAt = 0): number[] =>
+    [...Array(size).keys()].map((i: number) => i + startAt);
 
 /**
  * Progress calculator result
  */
-export interface IProgressCalculator {
+export interface ProgressCalculator {
     /**
      * Achieved number
      */
-    achieved: number;
+    achieved: number
     /**
      * Missing number from achieved to whole
      */
-    missing: number;
+    missing: number
     /**
      * Percentage of achieved number to whole number
      */
-    percentage: number;
+    percentage: number
     /**
      * Whole number
      */
-    whole: number;
+    whole: number
 }
 
 /**
@@ -35,11 +34,9 @@ export interface IProgressCalculator {
  * @param whole The whole
  * @param decimalPoints To how many decimal points should the result ber rounded
  */
-export function progressCalculator(achieved: number, whole: number,
-                                   decimalPoints: number = 0):
-                                   IProgressCalculator {
-    const DECIMAL_BASE: number = 10;
-    const PERCENTAGE_TO_INT: number = 2;
+export const progressCalculator = (achieved: number, whole: number, decimalPoints = 0): ProgressCalculator => {
+    const DECIMAL_BASE = 10;
+    const PERCENTAGE_TO_INT = 2;
     const ROUNDING_CORRECTION: number = DECIMAL_BASE **
      (decimalPoints + PERCENTAGE_TO_INT);
 
@@ -47,15 +44,14 @@ export function progressCalculator(achieved: number, whole: number,
         achieved,
         missing: whole - achieved,
         percentage: Math.round((achieved / whole) * ROUNDING_CORRECTION),
-        whole,
+        whole
     };
-}
+};
 
 /**
  * Flatten an array
  * @param array Array that should be flattened
  * @example flattenArray([[1,2,3],[4,5,6]]) === [1,2,3,4,5,6]
  */
-export function flattenArray<T>(array: T[][]): T[] {
-    return Array<T>().concat.apply([], array);
-}
+export const flattenArray = <T>(array: T[][]): T[] =>
+    Array<T>().concat.apply([], array);

@@ -29,29 +29,34 @@ Currently there is only a documentation for the source code directly from the so
 
 ## Run
 
-### Main script
-
-```sh
-npm start
-```
+| Commands | Description |
+| `npm start` | Run TypeScript program and use either `data/demo.json` or a custom `data/uni.json` file as input |
+| `npm start:live` | Run `npm start` automatically every time a source file or input file is updated |
+| `npm build` | Compile program to nodejs executable script in `dist` with the main file being `dist/index.js` |
+| `npm start:js` | Run compiled nodejs program (no dev dependencies necessary) with the same input files as when executing the typescript files |
 
 ### Update JSON schema template of the data
 
 ```sh
-cd templates
-sh ./createTsTypeFromJsonSchema.sh
+npm run createTsTypeFromJsonSchema
 ```
 
 ## Export to JavaScript
 
-You need to first compile it and copy the source files to the `dist` directory:
+You need to first compile it:
 
 ```sh
 npm run build
 ```
 
-An then you can run the app really fast by executing:
+An then you can run the JavaScript files with:
 
 ```sh
-npm run start_js
+npm run start:js
+```
+
+or with:
+
+```sh
+node dist/index.js
 ```

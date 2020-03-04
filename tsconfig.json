@@ -1,33 +1,23 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "CommonJS",
         "esModuleInterop": true,
-        "target": "es2018",
+        "target": "ES2020",
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "removeComments": true,
         "outDir": "dist",
         "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        },
         "strict": true,
-        "declaration": true
+        "strictNullChecks": true,
+        "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "src/**/*",
-        "templates/uni_template.ts",
-        "templates/default_table_style.css"
+        "src/*.ts"
     ],
-    "typedocOptions": {
-      "ignoreCompilerErrors": true,
-      "mode": "file",
-      "out": "./docs/typedoc",
-      "name": "UniStats",
-      "readme": "./docs/DOCS_README_TYPEDOC.md",
-      "verbose": true
-    }
+    "exclude": [
+        "node_modules",
+        "src/templates"
+    ]
 }
