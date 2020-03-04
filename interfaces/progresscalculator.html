@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IExamTryCount | UniStats</title>
+	<title>ProgressCalculator | UniStats</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,21 +56,28 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="iexamtrycount.html">IExamTryCount</a>
+					<a href="progresscalculator.html">ProgressCalculator</a>
 				</li>
 			</ul>
-			<h1>Interface IExamTryCount</h1>
+			<h1>Interface ProgressCalculator</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Progress calculator result</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IExamTryCount</span>
+						<span class="target">ProgressCalculator</span>
 					</li>
 				</ul>
 			</section>
@@ -81,9 +88,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iexamtrycount.html#one" class="tsd-kind-icon">one</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iexamtrycount.html#three" class="tsd-kind-icon">three</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iexamtrycount.html#two" class="tsd-kind-icon">two</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="progresscalculator.html#achieved" class="tsd-kind-icon">achieved</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="progresscalculator.html#missing" class="tsd-kind-icon">missing</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="progresscalculator.html#percentage" class="tsd-kind-icon">percentage</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="progresscalculator.html#whole" class="tsd-kind-icon">whole</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,47 +100,62 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="one" class="tsd-anchor"></a>
-					<h3>one</h3>
-					<div class="tsd-signature tsd-kind-icon">one<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="achieved" class="tsd-anchor"></a>
+					<h3>achieved</h3>
+					<div class="tsd-signature tsd-kind-icon">achieved<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/index.ts#L53">src/index.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/util.ts#L16">util.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Exam count that was tried once</p>
+							<p>Achieved number</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="three" class="tsd-anchor"></a>
-					<h3>three</h3>
-					<div class="tsd-signature tsd-kind-icon">three<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="missing" class="tsd-anchor"></a>
+					<h3>missing</h3>
+					<div class="tsd-signature tsd-kind-icon">missing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/index.ts#L57">src/index.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/util.ts#L20">util.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Exam count that was tried three times</p>
+							<p>Missing number from achieved to whole</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="two" class="tsd-anchor"></a>
-					<h3>two</h3>
-					<div class="tsd-signature tsd-kind-icon">two<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="percentage" class="tsd-anchor"></a>
+					<h3>percentage</h3>
+					<div class="tsd-signature tsd-kind-icon">percentage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/index.ts#L61">src/index.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/util.ts#L24">util.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Exam count that was tried twice</p>
+							<p>Percentage of achieved number to whole number</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="whole" class="tsd-anchor"></a>
+					<h3>whole</h3>
+					<div class="tsd-signature tsd-kind-icon">whole<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/util.ts#L28">util.ts:28</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whole number</p>
 						</div>
 					</div>
 				</section>
@@ -151,16 +174,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="iexamtrycount.html" class="tsd-kind-icon">IExam<wbr>Try<wbr>Count</a>
+						<a href="progresscalculator.html" class="tsd-kind-icon">Progress<wbr>Calculator</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iexamtrycount.html#one" class="tsd-kind-icon">one</a>
+								<a href="progresscalculator.html#achieved" class="tsd-kind-icon">achieved</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iexamtrycount.html#three" class="tsd-kind-icon">three</a>
+								<a href="progresscalculator.html#missing" class="tsd-kind-icon">missing</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iexamtrycount.html#two" class="tsd-kind-icon">two</a>
+								<a href="progresscalculator.html#percentage" class="tsd-kind-icon">percentage</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="progresscalculator.html#whole" class="tsd-kind-icon">whole</a>
 							</li>
 						</ul>
 					</li>
@@ -183,6 +209,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -231,7 +258,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

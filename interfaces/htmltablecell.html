@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IProgressCalculator | UniStats</title>
+	<title>HtmlTableCell | UniStats</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="iprogresscalculator.html">IProgressCalculator</a>
+					<a href="htmltablecell.html">HtmlTableCell</a>
 				</li>
 			</ul>
-			<h1>Interface IProgressCalculator</h1>
+			<h1>Interface HtmlTableCell</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Progress calculator result</p>
+						<p>HTML table cell structure</p>
 					</div>
 				</div>
 			</section>
@@ -77,7 +77,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IProgressCalculator</span>
+						<span class="target">HtmlTableCell</span>
 					</li>
 				</ul>
 			</section>
@@ -88,10 +88,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iprogresscalculator.html#achieved" class="tsd-kind-icon">achieved</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iprogresscalculator.html#missing" class="tsd-kind-icon">missing</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iprogresscalculator.html#percentage" class="tsd-kind-icon">percentage</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iprogresscalculator.html#whole" class="tsd-kind-icon">whole</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="htmltablecell.html#classes" class="tsd-kind-icon">classes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="htmltablecell.html#colspan" class="tsd-kind-icon">col<wbr>Span</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="htmltablecell.html#content" class="tsd-kind-icon">content</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="htmltablecell.html#headercell" class="tsd-kind-icon">header<wbr>Cell</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="htmltablecell.html#rowspan" class="tsd-kind-icon">row<wbr>Span</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,63 +101,93 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="achieved" class="tsd-anchor"></a>
-					<h3>achieved</h3>
-					<div class="tsd-signature tsd-kind-icon">achieved<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="classes" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> classes</h3>
+					<div class="tsd-signature tsd-kind-icon">classes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/util.ts#L17">src/util.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/createHtmlParts.ts#L11">createHtmlParts.ts:11</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Achieved number</p>
+							<p>Classes of the <code>td</code> tag</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><td class="a b c"></td>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="colspan" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> col<wbr>Span</h3>
+					<div class="tsd-signature tsd-kind-icon">col<wbr>Span<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/createHtmlParts.ts#L16">createHtmlParts.ts:16</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><code>colspan</code> of the <code>td</code> tag</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><td colspan="#"></td>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="content" class="tsd-anchor"></a>
+					<h3>content</h3>
+					<div class="tsd-signature tsd-kind-icon">content<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/createHtmlParts.ts#L20">createHtmlParts.ts:20</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The content of the table cell</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="missing" class="tsd-anchor"></a>
-					<h3>missing</h3>
-					<div class="tsd-signature tsd-kind-icon">missing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="headercell" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> header<wbr>Cell</h3>
+					<div class="tsd-signature tsd-kind-icon">header<wbr>Cell<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/util.ts#L21">src/util.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/createHtmlParts.ts#L24">createHtmlParts.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Missing number from achieved to whole</p>
+							<p>Is it a header cell (then use <code>th</code> tag, else use <code>td</code> tag)</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="percentage" class="tsd-anchor"></a>
-					<h3>percentage</h3>
-					<div class="tsd-signature tsd-kind-icon">percentage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="rowspan" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> row<wbr>Span</h3>
+					<div class="tsd-signature tsd-kind-icon">row<wbr>Span<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/util.ts#L25">src/util.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/8c6f559/src/createHtmlParts.ts#L29">createHtmlParts.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Percentage of achieved number to whole number</p>
+							<p><code>rowspan</code> of the <code>td</code> tag</p>
 						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="whole" class="tsd-anchor"></a>
-					<h3>whole</h3>
-					<div class="tsd-signature tsd-kind-icon">whole<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/AnonymerNiklasistanonym/UniStats/blob/019d77e/src/util.ts#L29">src/util.ts:29</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Whole number</p>
-						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><td rowspan="#"></td>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -174,19 +205,22 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="iprogresscalculator.html" class="tsd-kind-icon">IProgress<wbr>Calculator</a>
+						<a href="htmltablecell.html" class="tsd-kind-icon">Html<wbr>Table<wbr>Cell</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iprogresscalculator.html#achieved" class="tsd-kind-icon">achieved</a>
+								<a href="htmltablecell.html#classes" class="tsd-kind-icon">classes</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iprogresscalculator.html#missing" class="tsd-kind-icon">missing</a>
+								<a href="htmltablecell.html#colspan" class="tsd-kind-icon">col<wbr>Span</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iprogresscalculator.html#percentage" class="tsd-kind-icon">percentage</a>
+								<a href="htmltablecell.html#content" class="tsd-kind-icon">content</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="iprogresscalculator.html#whole" class="tsd-kind-icon">whole</a>
+								<a href="htmltablecell.html#headercell" class="tsd-kind-icon">header<wbr>Cell</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="htmltablecell.html#rowspan" class="tsd-kind-icon">row<wbr>Span</a>
 							</li>
 						</ul>
 					</li>
@@ -209,6 +243,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -257,7 +292,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
