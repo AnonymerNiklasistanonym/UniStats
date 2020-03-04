@@ -41,6 +41,7 @@ table>tbody>tr>td:first-child>div>p.number {
 table>tbody>tr>td.recommended>div.a,
 table>tbody>tr>td.participated>div.a,
 table>tbody>tr>td.wrote_exam>div.a,
+table>tbody>tr>td.pending_exam>div.a,
 table>tbody>tr>td.failed_exam>div.a {
     float: left;
 }
@@ -48,6 +49,7 @@ table>tbody>tr>td.failed_exam>div.a {
 table>tbody>tr>td.recommended>div.c,
 table>tbody>tr>td.participated>div.c,
 table>tbody>tr>td.wrote_exam>div.c,
+table>tbody>tr>td.pending_exam>div.c,
 table>tbody>tr>td.failed_exam>div.c {
     margin-top: 25px;
 }
@@ -55,6 +57,7 @@ table>tbody>tr>td.failed_exam>div.c {
 table>tbody>tr>td.recommended>div.b,
 table>tbody>tr>td.participated>div.b,
 table>tbody>tr>td.wrote_exam>div.b,
+table>tbody>tr>td.pending_exam>div.b,
 table>tbody>tr>td.failed_exam>div.b {
     float: right;
 }
@@ -62,6 +65,7 @@ table>tbody>tr>td.failed_exam>div.b {
 table>tbody>tr>td.recommended,
 table>tbody>tr>td.participated,
 table>tbody>tr>td.wrote_exam,
+table>tbody>tr>td.pending_exam,
 table>tbody>tr>td.failed_exam {
     min-width: 45px;
     min-height: 45px;
@@ -70,6 +74,7 @@ table>tbody>tr>td.failed_exam {
 table>tbody>tr>td.recommended>div,
 table>tbody>tr>td.participated>div,
 table>tbody>tr>td.wrote_exam>div,
+table>tbody>tr>td.pending_exam>div,
 table>tbody>tr>td.failed_exam>div {
     width: 20px;
     height: 20px;
@@ -88,6 +93,10 @@ table>tbody>tr>td.failed_exam>div.b {
 
 table>tbody>tr>td.wrote_exam>div.b {
     background-color: green;
+}
+
+table>tbody>tr>td.pending_exam>div.b {
+    background-color: orange;
 }
 
 table>tbody>tr>td.participated>div.a {

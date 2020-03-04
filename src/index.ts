@@ -72,8 +72,10 @@ const getClassesOfSemesterOfModule = (module: UniTemplate.Module,semester: numbe
     }
     if (module.wrote_exam_semesters !== undefined &&
         module.wrote_exam_semesters.includes(semester)) {
-        if (module.wrote_exam_semesters.includes(semester + 1)) {
+        if (module.wrote_exam_semesters.filter(a => a > semester).length > 0) {
             classes.push("failed_exam");
+        } else if (module.grade === undefined) {
+            classes.push("pending_exam");
         } else {
             classes.push("wrote_exam");
         }
@@ -249,8 +251,11 @@ const createSemesterProgressRow = (tableCellOffset: number,
         const creditSumSemester = semesterModules
             .reduce((sum, currentModule) => sum + currentModule.credits, 0);
         const creditSumAllSemester = moduleData
-            .filter((moduleInfo) => moduleInfo.participated_semesters !== undefined
-                && moduleInfo.participated_semesters.includes(semester))
+            .filter((moduleInfo) =>
+                (moduleInfo.participated_semesters !== undefined
+                 && moduleInfo.participated_semesters.includes(semester))
+                || (moduleInfo.wrote_exam_semesters !== undefined
+                    && moduleInfo.wrote_exam_semesters.includes(semester)))
             .reduce((sum, currentModule) => sum + currentModule.credits, 0);
         const credGradeProg: ProgressCreditsGradeSemester = semesterModules
             .reduce((result: ProgressCreditsGradeSemester,
