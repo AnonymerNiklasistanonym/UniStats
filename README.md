@@ -30,6 +30,7 @@ Currently there is only a documentation for the source code directly from the so
 ## Run
 
 | Commands | Description |
+| ---------------- | ---------------- |
 | `npm start` | Run TypeScript program and use either `data/demo.json` or a custom `data/uni.json` file as input |
 | `npm start:live` | Run `npm start` automatically every time a source file or input file is updated |
 | `npm build` | Compile program to nodejs executable script in `dist` with the main file being `dist/index.js` |
