@@ -17,7 +17,7 @@ export interface HtmlTableCell {
     /**
      * The content of the table cell
      */
-    content: string | number
+    content: string
     /**
      * Is it a header cell (then use `th` tag, else use `td` tag)
      */

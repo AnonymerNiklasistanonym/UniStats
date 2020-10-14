@@ -9,16 +9,16 @@ import * as util from "./util";
 const demoDataFilePath: string = path.join(__dirname, "..", "data", "demo.json");
 const customDataFilePath: string = path.join(__dirname, "..", "data", "uni.json");
 
-const demoData = JSON.parse(fs.readFileSync(
+const data = JSON.parse(fs.readFileSync(
     fs.existsSync(customDataFilePath) ? customDataFilePath : demoDataFilePath,
     "utf8")) as UniTemplate.UniTemplate;
 
-if (!(demoData.module_groups.some((a) => a.modules !== undefined) ||
-    demoData.module_groups.some((a) => a.catalogs !== undefined))) {
+if (!(data.module_groups.some((a) => a.modules !== undefined) ||
+    data.module_groups.some((a) => a.catalogs !== undefined))) {
     throw Error("This only works if you have some modules defined");
 }
 
-const moduleData: ModuleInfo.ModuleWithInfo[] = ModuleInfo.getModules(demoData.module_groups);
+const moduleData: ModuleInfo.ModuleWithInfo[] = ModuleInfo.getModules(data.module_groups);
 const moduleDataCredits: ModuleInfo.ModuleCredit[] = ModuleInfo.getModuleCredits(moduleData);
 const moduleDataExamTries: ModuleInfo.ModuleExamTries[] = ModuleInfo.getModuleExamTries(moduleData);
 
@@ -87,7 +87,7 @@ const getClassesOfSemesterOfModule = (module: UniTemplate.Module,semester: numbe
 const tableCssSemesterCell =
     "<div class=\"a\"></div><div class=\"b\"></div><div class=\"c\"></div>";
 const tableCellCountWoSem = 3;
-const semesterCount: number = demoData.current_semester;
+const semesterCount: number = data.current_semester;
 const semesterList: number[] = util.range(semesterCount, 1);
 
 /**
@@ -132,7 +132,7 @@ const getProgressOfModuleList = (modules: UniTemplate.Module[], neededCredits?: 
     const progress = util.progressCalculator(creditSum, whole, 0);
 
     return `Progress: ${progress.achieved}/${progress.whole} (${
-        progress.percentage}%), Average grade: ${gradeAverage.toFixed(1)}`;
+        progress.percentage}%), Average grade: ${parseFloat(gradeAverage.toFixed(1))}`;
 };
 
 /**
@@ -142,8 +142,8 @@ const getProgressOfModuleList = (modules: UniTemplate.Module[], neededCredits?: 
 const createModuleRowForTable = (module: UniTemplate.Module): HtmlFunctions.HtmlTableCell[] =>
     [
         { content: HtmlFunctions.createModuleEntry(module) },
-        { content: module.grade !== undefined ? module.grade : "" },
-        { content: module.credits },
+        { content: module.grade !== undefined ? `${module.grade}` : "" },
+        { content: `${module.credits}` },
         ...semesterList.map((semester) => ({
             classes: getClassesOfSemesterOfModule(module, semester),
             content: tableCssSemesterCell
@@ -239,11 +239,11 @@ interface ProgressCreditsGradeSemester {
  * @param semesterCellCount The semesters that should be looked at
  * @param modules The modules that should be analyzed
  */
-const createSemesterProgressRow = (tableCellOffset: number,
-    semesterCellCount: number /* , modules: UniTemplate.Module[] */): HtmlFunctions.HtmlTableCell[] => {
+const createSemesterProgressRows = (tableCellOffset: number,
+    semesterCellCount: number /* , modules: UniTemplate.Module[] */): HtmlFunctions.HtmlTableCell[][] => {
     const semesters = util.range(semesterCellCount, 1);
     const moduleCreditGradeInfo = ModuleInfo.getModuleCredits(moduleData);
-    const semesterStats: string[] = semesters.map((semester) => {
+    const semesterStats = semesters.map((semester) => {
         const semesterModules = moduleCreditGradeInfo
             .filter((moduleInfo) => moduleInfo.grade !== undefined)
             .filter((moduleInfo) => moduleInfo.semester !== undefined)
@@ -265,38 +265,89 @@ const createSemesterProgressRow = (tableCellOffset: number,
                     currentModuleInfo.credits
             }), { credits: 0, grade: 0 });
 
-        return `${credGradeProg.credits}/${credGradeProg.grade.toFixed(1)}` +
-               `<br>from: ${creditSumAllSemester}` ;
+        // A single ECTS credit approximates a 30-hour work load per semester
+        const hoursPerEtcsCredit = 30;
+        // The time courses are given approximates on average 15 weeks
+        const weeksPerSemester = 25;
+
+        return {
+            averageGradePerSemester: `${parseFloat(credGradeProg.grade.toFixed(1))}`,
+            pointsPerSemester: {
+                registered: creditSumAllSemester,
+                achieved: credGradeProg.credits
+            },
+            hoursPerSemesterWeek: {
+                registered: (creditSumAllSemester * hoursPerEtcsCredit) / weeksPerSemester,
+                achieved: (credGradeProg.credits * hoursPerEtcsCredit) / weeksPerSemester
+            }
+        };
     });
 
     return [
-        { content: "", colSpan: tableCellOffset },
-        ...semesterStats.map((progressString) => ({ content: progressString }))
+        [
+            { content: "Average grade per semester", colSpan: tableCellOffset },
+            ...semesterStats.map((a) => ({ content: a.averageGradePerSemester }))
+        ],
+        [
+            { content: "Points per semester (achieved/registered)", colSpan: tableCellOffset },
+            ...semesterStats.map((a) => ({ content: `${a.pointsPerSemester.achieved}/${
+                a.pointsPerSemester.registered} (${
+                parseFloat((a.pointsPerSemester.achieved / a.pointsPerSemester.registered * 100).toFixed(1))}%)` }))
+        ],
+        [
+            { content: "Registered hours per week in lecture period (achieved/registered)", colSpan: tableCellOffset },
+            ...semesterStats.map((a) => ({ content: `${a.hoursPerSemesterWeek.achieved}/${
+                a.hoursPerSemesterWeek.registered}` }))
+        ]
     ];
+};
+
+const latestSemester = semesterCount % 2
+    ? data.start_year.semester
+    : (data.start_year.semester === "SS" ? "WS" : "SS");
+
+const semesterInfo = {
+    startSemester: data.start_year.semester,
+    latestSemester,
+    startYear: data.start_year.year,
+    latestYear: data.start_year.year + Math.floor(semesterCount / 2)
+};
+
+const renderSemester = (semester: "SS" | "WS", year: number): string => {
+    if (semester === "SS") {
+        return `${semester} ${year}`;
+    } else {
+        return `${semester} ${year}/${year + 1}`;
+    }
 };
 
 const htmlTable: string = HtmlFunctions.createTable(
     [
         [
             { content: "", headerCell: true, colSpan: tableCellCountWoSem },
-            { content: "Semester", headerCell: true, colSpan: semesterCount }
+            {
+                content: `Semester (${renderSemester(semesterInfo.startSemester, semesterInfo.startYear)} - ${
+                    renderSemester(semesterInfo.latestSemester, semesterInfo.latestYear)} )`,
+                headerCell: true,
+                colSpan: semesterCount
+            }
         ],
         [
             { content: "Module", headerCell: true },
             { content: "Grade", headerCell: true },
             { content: "ETCS", headerCell: true },
             ...semesterList
-                .map((semester) => ({ content: semester, headerCell: true }))
+                .map((semester) => ({ content: `${semester}`, headerCell: true }))
         ]
     ],
     [
-        ...util.flattenArray(demoData.module_groups.map((moduleGroup) =>
+        ...util.flattenArray(data.module_groups.map((moduleGroup) =>
             createModuleGroupSectionForTable(moduleGroup, true))),
-        createSemesterProgressRow(tableCellCountWoSem, semesterCount /* , moduleData */)
+        ...createSemesterProgressRows(tableCellCountWoSem, semesterCount /* , moduleData */)
     ]
 );
 
-const creditProgress = util.progressCalculator(credits, demoData.needed_credits, 0);
+const creditProgress = util.progressCalculator(credits, data.needed_credits, 0);
 const htmlTableStats: string = HtmlFunctions.createTable([[]], [
     [
         { content: "Currently accumulated credits" },
@@ -307,19 +358,19 @@ const htmlTableStats: string = HtmlFunctions.createTable([[]], [
     ],
     [
         { content: "Currently calculated grade" },
-        { content: grade.toFixed(1) }
+        { content: `${parseFloat(grade.toFixed(1))}` }
     ],
     [
         { content: "Credits per semester" },
-        { content: credits / semesterCount }
+        { content: `${parseFloat((credits / semesterCount).toFixed(3))}` }
     ],
     [
         { content: "Exam 2nd tries" },
-        { content: examTryCount.two }
+        { content: `${examTryCount.two}` }
     ],
     [
         { content: "Exam 3rd tries" },
-        { content: examTryCount.three }
+        { content: `${examTryCount.three}` }
     ]
 ]);
 
@@ -331,10 +382,10 @@ const ISO_DATE_LENGTH = 10;
 const currentIsoDateString: string = new Date().toISOString()
     .slice(0, ISO_DATE_LENGTH);
 const htmlDocument = `<!DOCTYPE html><html><head><style>${cssContent
-}</style><meta charset="UTF-8"></head><body><h2>${demoData.title}</h2><h3>${
-    demoData.name.surname}, ${demoData.name.first_name} - ${
-    demoData.matriculation_number} (${demoData.field_of_study}, ${
-    demoData.current_semester}. semester)</h3><h4>${currentIsoDateString}</h4>${
+}</style><meta charset="UTF-8"></head><body><h2>${data.title}</h2><h3>${
+    data.name.surname}, ${data.name.first_name} - ${
+    data.matriculation_number} (${data.field_of_study}, ${
+    data.current_semester}. semester)</h3><h4>${currentIsoDateString}</h4>${
     htmlTable}<br>${htmlTableStats}</body></html>`;
 
 const tableFilePath: string = path.join(__dirname, "..", "data", "table.html");
