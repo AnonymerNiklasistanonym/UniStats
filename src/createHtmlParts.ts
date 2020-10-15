@@ -70,4 +70,4 @@ export const createTable = (header: HtmlTableCell[][], body: HtmlTableCell[][]):
  * @param module The module of which such a structure should be created
  */
 export const createModuleEntry = (module: Module): string =>
-    "<div>" + `<p class="title">${module.name}</p><p class="number">${module.number}</p>` + "</div>";
+    `<div><p class="title">${module.name}</p><p class="number">${module.number}</p></div>`;

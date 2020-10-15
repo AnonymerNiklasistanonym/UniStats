@@ -1,3 +1,5 @@
+import { promises as fs } from "fs";
+
 /**
  * Python like range function
  * @param size The size of the list/array to be created
@@ -32,13 +34,13 @@ export interface ProgressCalculator {
  * Calculate a progress between a whole number and an achieved part of it
  * @param achieved The achieved part of the whole
  * @param whole The whole
- * @param decimalPoints To how many decimal points should the result ber rounded
+ * @param decimalPlaces To how many decimal places (digits after the comma) should the result ber rounded
  */
-export const progressCalculator = (achieved: number, whole: number, decimalPoints = 0): ProgressCalculator => {
+export const progressCalculator = (achieved: number, whole: number, decimalPlaces = 0): ProgressCalculator => {
     const DECIMAL_BASE = 10;
     const PERCENTAGE_TO_INT = 2;
     const ROUNDING_CORRECTION: number = DECIMAL_BASE **
-     (decimalPoints + PERCENTAGE_TO_INT);
+     (decimalPlaces + PERCENTAGE_TO_INT);
 
     return {
         achieved,
@@ -55,3 +57,25 @@ export const progressCalculator = (achieved: number, whole: number, decimalPoint
  */
 export const flattenArray = <T>(array: T[][]): T[] =>
     Array<T>().concat.apply([], array);
+
+/** FS error */
+interface FsStatError extends Error {
+    code: string
+}
+
+/**
+ * Check asynchronously if a file exists
+ * @param filePath File path that should be checked
+ * @example await fileExists("filePath.txt")
+ */
+export const fileExists = async (filePath: string): Promise<boolean> => {
+    try {
+        const stat = await fs.stat(filePath);
+        return stat.isFile();
+    } catch (err) {
+        if ((err as FsStatError).code === "ENOENT") {
+            return false;
+        }
+        throw err;
+    }
+};

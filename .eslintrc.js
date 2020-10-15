@@ -51,6 +51,7 @@ module.exports = {
         "@typescript-eslint/semi": "error",
         "@typescript-eslint/unified-signatures": "error",
         "require-await": "error",
-        "comma-spacing": ["error", { "before": false, "after": true }]
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "no-console": ["error", { allow: ["info", "warn", "error"] }]
     }
 };
