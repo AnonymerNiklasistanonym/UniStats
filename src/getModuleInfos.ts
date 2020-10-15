@@ -174,3 +174,61 @@ export const getModuleExamTries = (modules: ModuleWithInfo[]): ModuleExamTries[]
 
         return moduleExamTries;
     });
+
+/**
+ * Determine classes of a semester of a module
+ * @param module Module which should be checked
+ * @param semester Semester which should be checked
+ */
+export const getClassesOfSemesterOfModule = (module: Module, semester: number): string[] => {
+    const classes: string[] = [];
+    if (module.recommended_semester !== undefined &&
+    module.recommended_semester === semester) {
+        classes.push("recommended");
+    }
+    if (module.participated_semesters !== undefined &&
+    module.participated_semesters.includes(semester)) {
+        classes.push("participated");
+    }
+    if (module.wrote_exam_semesters !== undefined &&
+    module.wrote_exam_semesters.includes(semester)) {
+        if (module.wrote_exam_semesters.filter(a => a > semester).length > 0) {
+            classes.push("failed_exam");
+        } else if (module.grade === undefined) {
+            classes.push("pending_exam");
+        } else {
+            classes.push("wrote_exam");
+        }
+    }
+
+    return classes;
+};
+
+/**
+ * Get the sum of achieved credits of a list of modules
+ * @param modules The module list which should be analyzed
+ */
+export const getModuleAchievedCreditSum = (modules: Module[]): number =>
+    modules
+        .filter((a) => a.grade !== undefined)
+        .reduce((sum, currentModule) => sum + currentModule.credits, 0);
+
+/**
+ * Get the sum of all credits of a list of modules
+ * @param modules The module list which should be analyzed
+ */
+export const getModuleCreditSum = (modules: Module[]): number =>
+    modules.reduce((sum, currentModule) => sum + currentModule.credits, 0);
+
+/**
+ * Get the average of achieved grades of a list of modules
+ * @param modules The module list which should be analyzed
+ */
+export const getModuleGradeAverage = (modules: Module[]): number => {
+    const moduleCreditSum: number = getModuleAchievedCreditSum(modules);
+
+    return modules.filter((a) => a.grade !== undefined)
+        .reduce((sum, currentModule) => sum +
+        ((currentModule.grade ? currentModule.grade : 0) / moduleCreditSum) * currentModule.credits,
+        0);
+};

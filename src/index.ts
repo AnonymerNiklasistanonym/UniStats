@@ -8,32 +8,34 @@ import * as ModuleInfo from "./getModuleInfos";
 import * as util from "./util";
 
 
+const dataDirectory = path.join(__dirname, "..", "data");
+
 /** Input file path to demo data file */
-const inputDemoDataFilePath = path.join(__dirname, "..", "data", "demo.json");
+const inputDemoDataFilePath = path.join(dataDirectory, "demo.json");
 /** Input file path to custom data file */
-const inputJsonCustomDataFilePath = path.join(__dirname, "..", "data", "uni.json");
+const inputJsonCustomDataFilePath = path.join(dataDirectory, "uni.json");
 
 /** Input file path to CSS file path */
 const inputCssFilePath: string = path.join(__dirname, "..", "styles", "default_table_style.css");
 
 /** Output HTML file path */
-const outputHtmlFilePath = path.join(__dirname, "..", "data", "table.html");
+const outputHtmlFilePath = path.join(dataDirectory, "table.html");
 
 
 (async (): Promise<void> => {
 
     // Check if there is a custom data file
-    const data = JSON.parse(await fs.readFile(await util.fileExists(inputJsonCustomDataFilePath)
-        ? inputJsonCustomDataFilePath : inputDemoDataFilePath, "utf8")) as UniTemplate.UniTemplate;
-
-    // Get ISO date
-    const ISO_DATE_LENGTH = 10;
-    const currentIsoDateString: string = new Date().toISOString().slice(0, ISO_DATE_LENGTH);
-
+    const dataFilePath = await util.fileExists(inputJsonCustomDataFilePath)
+        ? inputJsonCustomDataFilePath : inputDemoDataFilePath;
+    const data = JSON.parse(await fs.readFile(dataFilePath, "utf8")) as UniTemplate.UniTemplate;
     if (!(data.module_groups.some((a) => a.modules !== undefined) ||
     data.module_groups.some((a) => a.catalogs !== undefined))) {
         throw Error("This only works if you have some modules defined");
     }
+
+    // Get ISO date
+    const ISO_DATE_LENGTH = 10;
+    const currentIsoDateString: string = new Date().toISOString().slice(0, ISO_DATE_LENGTH);
 
     const moduleData: ModuleInfo.ModuleWithInfo[] = ModuleInfo.getModules(data.module_groups);
     const moduleDataCredits: ModuleInfo.ModuleCredit[] = ModuleInfo.getModuleCredits(moduleData);
@@ -71,69 +73,10 @@ const outputHtmlFilePath = path.join(__dirname, "..", "data", "table.html");
             .filter((module) => module.tries === EXAM_TRY_COUNT_TWO).length
     };
 
-    /**
-     * Determine classes of a semester of a module
-     * @param module Module which should be checked
-     * @param semester Semester which should be checked
-     */
-    // eslint-disable-next-line complexity
-    const getClassesOfSemesterOfModule = (module: UniTemplate.Module, semester: number): string[] => {
-        const classes: string[] = [];
-        if (module.recommended_semester !== undefined &&
-        module.recommended_semester === semester) {
-            classes.push("recommended");
-        }
-        if (module.participated_semesters !== undefined &&
-        module.participated_semesters.includes(semester)) {
-            classes.push("participated");
-        }
-        if (module.wrote_exam_semesters !== undefined &&
-        module.wrote_exam_semesters.includes(semester)) {
-            if (module.wrote_exam_semesters.filter(a => a > semester).length > 0) {
-                classes.push("failed_exam");
-            } else if (module.grade === undefined) {
-                classes.push("pending_exam");
-            } else {
-                classes.push("wrote_exam");
-            }
-        }
-
-        return classes;
-    };
-
     const tableCssSemesterCell = "<div class=\"a\"></div><div class=\"b\"></div><div class=\"c\"></div>";
     const tableCellCountWoSem = 3;
     const semesterCount: number = data.current_semester;
     const semesterList: number[] = util.range(semesterCount, 1);
-
-    /**
-     * Get the sum of achieved credits of a list of modules
-     * @param modules The module list which should be analyzed
-     */
-    const getModuleAchievedCreditSum = (modules: UniTemplate.Module[]): number =>
-        modules
-            .filter((a) => a.grade !== undefined)
-            .reduce((sum, currentModule) => sum + currentModule.credits, 0);
-
-    /**
-     * Get the sum of all credits of a list of modules
-     * @param modules The module list which should be analyzed
-     */
-    const getModuleCreditSum = (modules: UniTemplate.Module[]): number =>
-        modules.reduce((sum, currentModule) => sum + currentModule.credits, 0);
-
-    /**
-     * Get the average of achieved grades of a list of modules
-     * @param modules The module list which should be analyzed
-     */
-    const getModuleGradeAverage = (modules: UniTemplate.Module[]): number => {
-        const moduleCreditSum: number = getModuleAchievedCreditSum(modules);
-
-        return modules.filter((a) => a.grade !== undefined)
-            .reduce((sum, currentModule) => sum +
-            ((currentModule.grade ? currentModule.grade : 0) / moduleCreditSum) * currentModule.credits,
-            0);
-    };
 
     /**
      * Get the average of achieved grades of a list of modules
@@ -142,9 +85,9 @@ const outputHtmlFilePath = path.join(__dirname, "..", "data", "table.html");
      */
     const getProgressOfModuleList = (modules: UniTemplate.Module[], neededCredits?: number): string => {
         const whole = neededCredits !== undefined
-            ? neededCredits : getModuleCreditSum(modules);
-        const gradeAverage = getModuleGradeAverage(modules);
-        const creditSum = getModuleAchievedCreditSum(modules);
+            ? neededCredits : ModuleInfo.getModuleCreditSum(modules);
+        const gradeAverage = ModuleInfo.getModuleGradeAverage(modules);
+        const creditSum = ModuleInfo.getModuleAchievedCreditSum(modules);
         const progress = util.progressCalculator(creditSum, whole, 0);
 
         return `Progress: ${progress.achieved}/${progress.whole} (${
@@ -161,7 +104,7 @@ const outputHtmlFilePath = path.join(__dirname, "..", "data", "table.html");
             { content: module.grade !== undefined ? `${module.grade}` : "" },
             { content: `${module.credits}` },
             ...semesterList.map((semester) => ({
-                classes: getClassesOfSemesterOfModule(module, semester),
+                classes: ModuleInfo.getClassesOfSemesterOfModule(module, semester),
                 content: tableCssSemesterCell
             }))
         ];
@@ -401,7 +344,7 @@ const outputHtmlFilePath = path.join(__dirname, "..", "data", "table.html");
 
     // Write table to local file
     await fs.writeFile(outputHtmlFilePath, htmlDocumentContent);
-    console.info(`HTML table was written to '${outputHtmlFilePath}' in ${performance.now()} ms`);
+    console.info(`HTML table was written to '${outputHtmlFilePath}' in ${performance.now()} ms using ${dataFilePath}`);
 
 })().catch(err => {
     console.error(err);
