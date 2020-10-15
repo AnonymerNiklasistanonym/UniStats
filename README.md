@@ -36,6 +36,7 @@ Currently there is only a documentation for the source code directly from the so
 | `npm run build` | Compile program to nodejs executable script in `dist` with the main file being `dist/index.js` |
 | `npm run start:js` | Run compiled nodejs program (no dev dependencies necessary) with the same input files as when executing the typescript files |
 | `npm run docs` | Create the documentation of the source code |
+| `npm run lint` | Lint the source code and automatically fix easy/syntax errors |
 
 ### Update JSON schema template of the data
 
@@ -48,7 +49,7 @@ npm run createTsTypeFromJsonSchema
 You need to first compile it:
 
 ```sh
-npm run build
+npm run build:js
 ```
 
 An then you can run the JavaScript files with:
