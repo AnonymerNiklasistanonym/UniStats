@@ -31,10 +31,11 @@ Currently there is only a documentation for the source code directly from the so
 
 | Commands | Description |
 | ---------------- | ---------------- |
-| `npm start` | Run TypeScript program and use either `data/demo.json` or a custom `data/uni.json` file as input |
-| `npm start:live` | Run `npm start` automatically every time a source file or input file is updated |
-| `npm build` | Compile program to nodejs executable script in `dist` with the main file being `dist/index.js` |
-| `npm start:js` | Run compiled nodejs program (no dev dependencies necessary) with the same input files as when executing the typescript files |
+| `npm run start` | Run TypeScript program and use either `data/demo.json` or a custom `data/uni.json` file as input |
+| `npm run start:live` | Run `npm start` automatically every time a source file or input file is updated |
+| `npm run build` | Compile program to nodejs executable script in `dist` with the main file being `dist/index.js` |
+| `npm run start:js` | Run compiled nodejs program (no dev dependencies necessary) with the same input files as when executing the typescript files |
+| `npm run docs` | Create the documentation of the source code |
 
 ### Update JSON schema template of the data
 
