@@ -15,7 +15,7 @@
     "start": "ts-node src/index.ts",
     "start:js": "node dist/index.js",
     "start:live": "nodemon --watch 'src/**/*.ts' --watch 'data/*.json' --exec npm run start",
-    "lint": "eslint -c .eslintrc.js --ext .ts src --fix",
+    "lint": "eslint -c .eslintrc.js --ext .ts src .eslintrc.js --fix",
     "docs": "npm-run-all typedoc",
     "typedoc": "ts-node ./docs/createDocs",
     "createTsTypeFromJsonSchema": "ts-node src/templates/createTsTypeFromJsonSchema.ts"
@@ -27,7 +27,9 @@
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "eslint": "^7.11.0",
+    "eslint-plugin-jsdoc": "^30.6.5",
     "eslint-plugin-prefer-arrow": "^1.2.2",
+    "eslint-plugin-promise": "^4.2.1",
     "json-schema-to-typescript": "^9.1.1",
     "nodemon": "^2.0.5",
     "npm-run-all": "^4.1.5",

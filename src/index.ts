@@ -60,7 +60,7 @@ const examTryCount: ExamTryCount = {
  * @param semester Semester which should be checked
  */
 // eslint-disable-next-line complexity
-const getClassesOfSemesterOfModule = (module: UniTemplate.Module,semester: number): string[] => {
+const getClassesOfSemesterOfModule = (module: UniTemplate.Module, semester: number): string[] => {
     const classes: string[] = [];
     if (module.recommended_semester !== undefined &&
         module.recommended_semester === semester) {
