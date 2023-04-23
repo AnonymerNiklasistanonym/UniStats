@@ -11,5 +11,12 @@
     },
     "include": [
         "src/**/*.mts"
-    ]
+    ],
+    "typedocOptions": {
+        "entryPointStrategy": "Expand",
+        "entryPoints": [
+            "src"
+        ],
+        "out": "docs/dist",
+    }
 }

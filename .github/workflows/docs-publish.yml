@@ -43,12 +43,6 @@ jobs:
           cache: 'npm'
       - uses: actions/configure-pages@v2
       - run: npm ci
-      - name: Install documentation dependencies (apt - ubuntu-latest)
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt install graphviz
-      - name: Install documentation dependencies (choco - windows-latest)
-        if: matrix.os == 'windows-latest'
-        run: choco install graphviz
       - run: npm run docs
       - name: Add demo files to docs
         run: |
